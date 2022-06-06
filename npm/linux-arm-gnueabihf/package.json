@@ -1,15 +1,15 @@
 {
-  "name": "@napi-rs/package-template-linux-arm-gnueabihf",
-  "version": "1.0.0",
+  "name": "nodejs-resolver-linux-arm-gnueabihf",
+  "version": "0.0.2",
   "os": [
     "linux"
   ],
   "cpu": [
     "arm"
   ],
-  "main": "package-template.linux-arm-gnueabihf.node",
+  "main": "nodejs-resolver.linux-arm-gnueabihf.node",
   "files": [
-    "package-template.linux-arm-gnueabihf.node"
+    "nodejs-resolver.linux-arm-gnueabihf.node"
   ],
   "description": "Template project for writing node package with napi-rs",
   "keywords": [
@@ -27,6 +27,5 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
-  },
-  "repository": "git@github.com:napi-rs/package-template.git"
+  }
 }

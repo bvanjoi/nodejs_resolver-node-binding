@@ -1,6 +1,6 @@
 {
-  "name": "@napi-rs/package-template-linux-arm64-musl",
-  "version": "1.0.0",
+  "name": "nodejs-resolver-linux-arm64-musl",
+  "version": "0.0.2",
   "os": [
     "linux"
   ],
@@ -10,9 +10,9 @@
   "libc": [
     "musl"
   ],
-  "main": "package-template.linux-arm64-musl.node",
+  "main": "nodejs-resolver.linux-arm64-musl.node",
   "files": [
-    "package-template.linux-arm64-musl.node"
+    "nodejs-resolver.linux-arm64-musl.node"
   ],
   "description": "Template project for writing node package with napi-rs",
   "keywords": [
@@ -30,6 +30,5 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
-  },
-  "repository": "git@github.com:napi-rs/package-template.git"
+  }
 }

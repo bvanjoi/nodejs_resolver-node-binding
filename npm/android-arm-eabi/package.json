@@ -1,15 +1,15 @@
 {
-  "name": "@napi-rs/package-template-android-arm-eabi",
-  "version": "1.0.0",
+  "name": "nodejs-resolver-android-arm-eabi",
+  "version": "0.0.2",
   "os": [
     "android"
   ],
   "cpu": [
     "arm"
   ],
-  "main": "package-template.android-arm-eabi.node",
+  "main": "nodejs-resolver.android-arm-eabi.node",
   "files": [
-    "package-template.android-arm-eabi.node"
+    "nodejs-resolver.android-arm-eabi.node"
   ],
   "description": "Template project for writing node package with napi-rs",
   "keywords": [
@@ -27,6 +27,5 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
-  },
-  "repository": "git@github.com:napi-rs/package-template.git"
+  }
 }

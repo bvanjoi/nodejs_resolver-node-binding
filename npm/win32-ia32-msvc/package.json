@@ -1,15 +1,15 @@
 {
-  "name": "@napi-rs/package-template-win32-ia32-msvc",
-  "version": "1.0.0",
+  "name": "nodejs-resolver-win32-ia32-msvc",
+  "version": "0.0.2",
   "os": [
     "win32"
   ],
   "cpu": [
     "ia32"
   ],
-  "main": "package-template.win32-ia32-msvc.node",
+  "main": "nodejs-resolver.win32-ia32-msvc.node",
   "files": [
-    "package-template.win32-ia32-msvc.node"
+    "nodejs-resolver.win32-ia32-msvc.node"
   ],
   "description": "Template project for writing node package with napi-rs",
   "keywords": [
@@ -27,6 +27,5 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
-  },
-  "repository": "git@github.com:napi-rs/package-template.git"
+  }
 }

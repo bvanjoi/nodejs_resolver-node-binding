@@ -1,8 +1,12 @@
+import path from 'path'
+
 import test from 'ava'
 
-import { plus100 } from '../index'
+import factory from '../index'
 
 test('sync function from native code', (t) => {
-  const fixture = 42
-  t.is(plus100(fixture), fixture + 100)
+  const resolver = factory.create(JSON.stringify({}))
+  const result = factory.resolve(resolver, __dirname, './lib.js')
+  t.is(result.path, path.resolve(__dirname, './lib.js'))
+  t.is(result.status, true)
 })
