@@ -2,17 +2,18 @@ use napi::bindgen_prelude::External;
 use napi_derive::napi;
 use nodejs_resolver::{Resolver, ResolverOptions};
 use serde::Deserialize;
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 use std::path::Path;
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
+#[napi(object)]
 pub struct RawResolverOptions {
   pub extensions: Option<Vec<String>>,
   pub enforce_extension: Option<Option<bool>>,
   pub alias: Option<HashMap<String, Option<String>>>,
   pub alias_fields: Option<Vec<String>>,
-  pub condition_names: Option<HashSet<String>>,
+  pub condition_names: Option<Vec<String>>,
   pub symlinks: Option<bool>,
   pub description_file: Option<Option<String>>,
   pub main_files: Option<Vec<String>>,
@@ -33,7 +34,7 @@ impl RawResolverOptions {
       condition_names: self
         .condition_names
         .to_owned()
-        .unwrap_or(default.condition_names),
+        .map_or(default.condition_names, |vec| vec.into_iter().collect()),
       symlinks: self.symlinks.unwrap_or(default.symlinks),
       description_file: self
         .description_file
@@ -54,9 +55,9 @@ impl RawResolverOptions {
 pub struct ResolverInternal {}
 
 #[napi(ts_return_type = "ExternalObject<ResolverInternal>")]
-pub fn create(options: String) -> Result<External<Resolver>, napi::Error> {
-  let options: RawResolverOptions = serde_json::from_str(options.as_str())
-    .map_err(|err| napi::Error::new(napi::Status::InvalidArg, err.to_string()))?;
+pub fn create(options: RawResolverOptions) -> Result<External<Resolver>, napi::Error> {
+  // let options: RawResolverOptions = serde_json::from_str(options.as_str())
+  //   .map_err(|err| napi::Error::new(napi::Status::InvalidArg, err.to_string()))?;
   let resolver = Resolver::new(options.normalized());
   Ok(External::new(resolver))
 }
@@ -67,7 +68,10 @@ pub struct ResolveResult {
   pub path: Option<String>,
 }
 
-#[napi(ts_args_type = "resolver: ExternalObject<ResolverInternal>,")]
+#[napi(
+  ts_args_type = "resolver: ExternalObject<ResolverInternal>, base_dir: string, id: string",
+  ts_return_type = "{status: boolean, path?: string}"
+)]
 pub fn resolve(
   resolver: External<Resolver>,
   base_dir: String,
