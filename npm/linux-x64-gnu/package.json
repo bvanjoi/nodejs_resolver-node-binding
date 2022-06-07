@@ -1,6 +1,6 @@
 {
-  "name": "@napi-rs/package-template-linux-x64-gnu",
-  "version": "1.0.0",
+  "name": "nodejs-resolver-linux-x64-gnu",
+  "version": "0.0.2",
   "os": [
     "linux"
   ],
@@ -10,9 +10,9 @@
   "libc": [
     "glibc"
   ],
-  "main": "package-template.linux-x64-gnu.node",
+  "main": "nodejs-resolver.linux-x64-gnu.node",
   "files": [
-    "package-template.linux-x64-gnu.node"
+    "nodejs-resolver.linux-x64-gnu.node"
   ],
   "description": "Template project for writing node package with napi-rs",
   "keywords": [
@@ -30,6 +30,5 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
-  },
-  "repository": "git@github.com:napi-rs/package-template.git"
+  }
 }
