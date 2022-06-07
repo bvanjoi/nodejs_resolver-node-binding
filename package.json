@@ -50,7 +50,7 @@
     "version": "napi version"
   },
   "devDependencies": {
-    "@napi-rs/cli": "^2.7.0",
+    "@napi-rs/cli": "2.9.0",
     "@swc-node/register": "^1.5.1",
     "ava": "^4.2.0",
     "benny": "^3.7.1",
