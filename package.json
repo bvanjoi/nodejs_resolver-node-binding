@@ -1,7 +1,7 @@
 {
   "name": "nodejs-resolver",
-  "version": "0.0.2",
-  "description": "Template project for writing node package with napi-rs",
+  "version": "0.0.3",
+  "description": "node binding for nodejs-resolver",
   "main": "index.js",
   "license": "MIT",
   "keywords": [
@@ -45,7 +45,6 @@
     "format": "run-p format:prettier format:rs",
     "format:prettier": "prettier . -w",
     "format:rs": "cargo fmt",
-    "lint": "eslint . -c ./.eslintrc.yml",
     "prepublishOnly": "napi prepublish -t npm",
     "test": "ava",
     "version": "napi version"
@@ -69,25 +68,17 @@
     "typescript": "^4.7.3"
     "@napi-rs/cli": "^2.7.0",
     "@swc-node/register": "^1.5.1",
-    "@typescript-eslint/eslint-plugin": "^5.22.0",
-    "@typescript-eslint/parser": "^5.22.0",
     "ava": "^4.2.0",
     "benny": "^3.7.1",
     "chalk": "^5.0.1",
-    "eslint": "^8.14.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-prettier": "^4.0.0",
     "husky": "^7.0.4",
     "lint-staged": "^12.4.1",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.6.2",
-    "typescript": "^4.6.4"
+    "typescript": "^4.6.4",
+    "@types/node": "^12.12.5"
   },
   "lint-staged": {
-    "*.@(js|ts|tsx)": [
-      "eslint -c .eslintrc.yml --fix"
-    ],
     "*.@(js|ts|tsx|yml|yaml|md|json)": [
       "prettier --write"
     ]
