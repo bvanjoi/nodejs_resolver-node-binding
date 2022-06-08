@@ -9,10 +9,14 @@ export class ExternalObject<T> {
     [K: symbol]: T
   }
 }
+export interface Alias {
+  key: string
+  value?: string
+}
 export interface RawResolverOptions {
   extensions?: Array<string>
   enforceExtension?: boolean | undefined | null
-  alias?: Record<string, string | undefined | null>
+  alias?: Array<Alias>
   aliasFields?: Array<string>
   conditionNames?: Array<string>
   symlinks?: boolean
