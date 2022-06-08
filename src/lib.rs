@@ -2,8 +2,15 @@ use napi::bindgen_prelude::External;
 use napi_derive::napi;
 use nodejs_resolver::{Resolver, ResolverOptions};
 use serde::Deserialize;
-use std::collections::HashMap;
 use std::path::Path;
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+#[napi(object)]
+pub struct Alias {
+  pub key: String,
+  pub value: Option<String>,
+}
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -11,7 +18,7 @@ use std::path::Path;
 pub struct RawResolverOptions {
   pub extensions: Option<Vec<String>>,
   pub enforce_extension: Option<Option<bool>>,
-  pub alias: Option<HashMap<String, Option<String>>>,
+  pub alias: Option<Vec<Alias>>,
   pub alias_fields: Option<Vec<String>>,
   pub condition_names: Option<Vec<String>>,
   pub symlinks: Option<bool>,
@@ -29,7 +36,10 @@ impl RawResolverOptions {
     ResolverOptions {
       enforce_extension: self.enforce_extension.unwrap_or(default.enforce_extension),
       extensions: self.extensions.to_owned().unwrap_or(default.extensions),
-      alias: self.alias.to_owned().unwrap_or(default.alias),
+      alias: self
+        .alias
+        .to_owned()
+        .map_or(default.alias, |alias| parse_alias(alias)),
       alias_fields: self.alias_fields.to_owned().unwrap_or(default.alias_fields),
       condition_names: self
         .condition_names
@@ -51,13 +61,18 @@ impl RawResolverOptions {
   }
 }
 
+fn parse_alias(alias: Vec<Alias>) -> Vec<(String, Option<String>)> {
+  alias
+    .into_iter()
+    .map(|item| (item.key, item.value))
+    .collect()
+}
+
 #[napi(object)]
 pub struct ResolverInternal {}
 
 #[napi(ts_return_type = "ExternalObject<ResolverInternal>")]
 pub fn create(options: RawResolverOptions) -> Result<External<Resolver>, napi::Error> {
-  // let options: RawResolverOptions = serde_json::from_str(options.as_str())
-  //   .map_err(|err| napi::Error::new(napi::Status::InvalidArg, err.to_string()))?;
   let resolver = Resolver::new(options.normalized());
   Ok(External::new(resolver))
 }
