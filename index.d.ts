@@ -15,17 +15,18 @@ export interface Alias {
 }
 export interface RawResolverOptions {
   extensions?: Array<string>
-  enforceExtension?: boolean | undefined | null
+  enforceExtension?: boolean
   alias?: Array<Alias>
   aliasFields?: Array<string>
   conditionNames?: Array<string>
   symlinks?: boolean
-  descriptionFile?: string | undefined | null
+  descriptionFile?: string
   mainFiles?: Array<string>
   mainFields?: Array<string>
   modules?: Array<string>
   preferRelative?: boolean
   enableUnsafeCache?: boolean
+  tsconfigPath?: string
 }
 export interface ResolverInternal {
   

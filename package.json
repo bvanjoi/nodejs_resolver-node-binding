@@ -1,6 +1,6 @@
 {
   "name": "nodejs-resolver",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "node binding for nodejs-resolver",
   "main": "index.js",
   "license": "MIT",
@@ -52,6 +52,7 @@
   "devDependencies": {
     "@napi-rs/cli": "^2.9.0",
     "@swc-node/register": "^1.5.1",
+    "@types/node": "^12.12.5",
     "@typescript-eslint/eslint-plugin": "^5.27.1",
     "@typescript-eslint/parser": "^5.27.1",
     "ava": "^4.3.0",
@@ -66,18 +67,6 @@
     "npm-run-all": "^4.1.5",
     "prettier": "^2.6.2",
     "typescript": "^4.7.3"
-    "@napi-rs/cli": "^2.7.0",
-    "@napi-rs/cli": "2.9.0",
-    "@swc-node/register": "^1.5.1",
-    "ava": "^4.2.0",
-    "benny": "^3.7.1",
-    "chalk": "^5.0.1",
-    "husky": "^7.0.4",
-    "lint-staged": "^12.4.1",
-    "npm-run-all": "^4.1.5",
-    "prettier": "^2.6.2",
-    "typescript": "^4.6.4",
-    "@types/node": "^12.12.5"
   },
   "lint-staged": {
     "*.@(js|ts|tsx|yml|yaml|md|json)": [
@@ -103,5 +92,4 @@
     "arrowParens": "always"
   },
   "packageManager": "yarn@3.2.1"
-  }
 }
