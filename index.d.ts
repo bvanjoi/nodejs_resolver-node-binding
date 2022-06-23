@@ -28,14 +28,12 @@ export interface RawResolverOptions {
   enableUnsafeCache?: boolean
   tsconfigPath?: string
 }
-export interface ResolverInternal {}
+export interface ResolverInternal {
+  
+}
 export function create(options: RawResolverOptions): ExternalObject<ResolverInternal>
 export interface ResolveResult {
   status: boolean
   path?: string
 }
-export function resolve(
-  resolver: ExternalObject<ResolverInternal>,
-  base_dir: string,
-  id: string,
-): { status: boolean; path?: string }
+export function resolve(resolver: ExternalObject<ResolverInternal>, base_dir: string, id: string): {status: boolean, path?: string}
