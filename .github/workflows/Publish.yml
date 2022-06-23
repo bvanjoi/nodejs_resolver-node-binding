@@ -9,7 +9,6 @@ env:
       - main
     paths:
       - 'package.json'
-      - '.github/workflows/Publish.yml'
 
 jobs:
   build:
