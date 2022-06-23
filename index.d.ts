@@ -15,24 +15,27 @@ export interface Alias {
 }
 export interface RawResolverOptions {
   extensions?: Array<string>
-  enforceExtension?: boolean | undefined | null
+  enforceExtension?: boolean
   alias?: Array<Alias>
   aliasFields?: Array<string>
   conditionNames?: Array<string>
   symlinks?: boolean
-  descriptionFile?: string | undefined | null
+  descriptionFile?: string
   mainFiles?: Array<string>
   mainFields?: Array<string>
   modules?: Array<string>
   preferRelative?: boolean
   enableUnsafeCache?: boolean
+  tsconfigPath?: string
 }
-export interface ResolverInternal {
-  
-}
+export interface ResolverInternal {}
 export function create(options: RawResolverOptions): ExternalObject<ResolverInternal>
 export interface ResolveResult {
   status: boolean
   path?: string
 }
-export function resolve(resolver: ExternalObject<ResolverInternal>, base_dir: string, id: string): {status: boolean, path?: string}
+export function resolve(
+  resolver: ExternalObject<ResolverInternal>,
+  base_dir: string,
+  id: string,
+): { status: boolean; path?: string }
