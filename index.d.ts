@@ -20,7 +20,7 @@ export interface RawResolverOptions {
   aliasFields?: Array<string>
   conditionNames?: Array<string>
   symlinks?: boolean
-  descriptionFile?: string
+  descriptionFile?: string | undefined | null
   mainFiles?: Array<string>
   mainFields?: Array<string>
   modules?: Array<string>
