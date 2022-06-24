@@ -7,8 +7,7 @@ import factory, { RawResolverOptions } from '../index'
 test('sync function from native code', (t) => {
   const resolver = factory.create({})
   const result = factory.resolve(resolver, __dirname, './fixture/lib')
-  t.is(result.path, path.resolve(__dirname, './fixture/lib.js'))
-  t.is(result.status, true)
+  t.is(result, path.resolve(__dirname, './fixture/lib.js'))
 })
 
 test('resolve do not exist file', (t) => {
@@ -33,12 +32,10 @@ test('extensions options', (t) => {
   }
   const resolver = factory.create(resolverOptions)
   const result = factory.resolve(resolver, __dirname, './fixture/lib')
-  t.is(result.path, path.resolve(__dirname, './fixture/lib.ts'))
-  t.is(result.status, true)
+  t.is(result, path.resolve(__dirname, './fixture/lib.ts'))
   // with query and fragment
   const result2 = factory.resolve(resolver, __dirname, './fixture/lib?query#fragment')
-  t.is(result2.path, path.resolve(__dirname, './fixture/lib.ts?query#fragment'))
-  t.is(result2.status, true)
+  t.is(result2, path.resolve(__dirname, './fixture/lib.ts?query#fragment'))
 })
 
 
@@ -57,10 +54,8 @@ test('alias options', (t) => {
   }
   const resolver = factory.create(resolverOptions)
   const result = factory.resolve(resolver, __dirname, '@alias/lib')
-  t.is(result.path, path.resolve(__dirname, './fixture/lib.js'))
-  t.is(result.status, true)
+  t.is(result, path.resolve(__dirname, './fixture/lib.js'))
 
   const result2 = factory.resolve(resolver, __dirname, '@false/lib')
-  t.is(result2.path, undefined)
-  t.is(result2.status, false)
+  t.is(result2, "false")
 })

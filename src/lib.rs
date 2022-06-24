@@ -84,33 +84,21 @@ pub fn create(options: RawResolverOptions) -> Result<External<Resolver>, napi::E
   Ok(External::new(resolver))
 }
 
-#[napi(object)]
-pub struct ResolveResult {
-  pub status: bool,
-  pub path: Option<String>,
-}
-
 #[napi(
   ts_args_type = "resolver: ExternalObject<ResolverInternal>, base_dir: string, id: string",
-  ts_return_type = "{status: boolean, path?: string}"
+  ts_return_type = "string | false"
 )]
 pub fn resolve(
   resolver: External<Resolver>,
   base_dir: String,
   id: String,
-) -> Result<ResolveResult, napi::Error> {
+) -> Result<String, napi::Error> {
   match (*resolver).resolve(Path::new(&base_dir), &id) {
     Ok(val) => {
       if let nodejs_resolver::ResolverResult::Info(info) = val {
-        Ok(ResolveResult {
-          status: true,
-          path: Some(format!("{}{}{}", info.path.display(), &info.request.query, &info.request.fragment)),
-        })
+        Ok(format!("{}{}{}", info.path.display(), &info.request.query, &info.request.fragment))
       } else {
-        Ok(ResolveResult {
-          status: false,
-          path: None,
-        })
+        Ok(String::from("false"))
       }
     }
     Err(err) => Err(napi::Error::new(napi::Status::GenericFailure, err)),
