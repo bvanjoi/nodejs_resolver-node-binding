@@ -104,7 +104,7 @@ pub fn resolve(
       if let nodejs_resolver::ResolverResult::Info(info) = val {
         Ok(ResolveResult {
           status: true,
-          path: Some(info.get_path().display().to_string()),
+          path: Some(format!("{}{}{}", info.path.display(), &info.request.query, &info.request.fragment)),
         })
       } else {
         Ok(ResolveResult {

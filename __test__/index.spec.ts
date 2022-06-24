@@ -35,6 +35,10 @@ test('extensions options', (t) => {
   const result = factory.resolve(resolver, __dirname, './fixture/lib')
   t.is(result.path, path.resolve(__dirname, './fixture/lib.ts'))
   t.is(result.status, true)
+  // with query and fragment
+  const result2 = factory.resolve(resolver, __dirname, './fixture/lib?query#fragment')
+  t.is(result2.path, path.resolve(__dirname, './fixture/lib.ts?query#fragment'))
+  t.is(result2.status, true)
 })
 
 
