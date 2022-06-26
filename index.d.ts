@@ -32,4 +32,4 @@ export interface ResolverInternal {
   
 }
 export function create(options: RawResolverOptions): ExternalObject<ResolverInternal>
-export function resolve(resolver: ExternalObject<ResolverInternal>, base_dir: string, id: string): string | false
+export function resolve(resolver: ExternalObject<ResolverInternal>, base_dir: string, id: string): string

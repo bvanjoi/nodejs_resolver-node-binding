@@ -2,9 +2,7 @@ use napi::bindgen_prelude::External;
 use napi_derive::napi;
 use nodejs_resolver::{AliasMap, Resolver, ResolverOptions};
 use serde::Deserialize;
-use std::{
-  path::{Path, PathBuf},
-};
+use std::path::{Path, PathBuf};
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -47,9 +45,9 @@ impl RawResolverOptions {
         .map_or(default.condition_names, |vec| vec.into_iter().collect()),
       symlinks: self.symlinks.unwrap_or(default.symlinks),
       description_file: self
-      .description_file
-      .to_owned()
-      .unwrap_or(default.description_file),
+        .description_file
+        .to_owned()
+        .unwrap_or(default.description_file),
       main_files: self.main_files.to_owned().unwrap_or(default.main_files),
       main_fields: self.main_fields.to_owned().unwrap_or(default.main_fields),
       prefer_relative: self.prefer_relative.unwrap_or(default.prefer_relative),
@@ -86,7 +84,7 @@ pub fn create(options: RawResolverOptions) -> Result<External<Resolver>, napi::E
 
 #[napi(
   ts_args_type = "resolver: ExternalObject<ResolverInternal>, base_dir: string, id: string",
-  ts_return_type = "string | false"
+  ts_return_type = "string"
 )]
 pub fn resolve(
   resolver: External<Resolver>,
@@ -96,7 +94,12 @@ pub fn resolve(
   match (*resolver).resolve(Path::new(&base_dir), &id) {
     Ok(val) => {
       if let nodejs_resolver::ResolverResult::Info(info) = val {
-        Ok(format!("{}{}{}", info.path.display(), &info.request.query, &info.request.fragment))
+        Ok(format!(
+          "{}{}{}",
+          info.path.display(),
+          &info.request.query,
+          &info.request.fragment
+        ))
       } else {
         Ok(String::from("false"))
       }
