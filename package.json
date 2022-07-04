@@ -1,6 +1,6 @@
 {
   "name": "nodejs-resolver",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "description": "node binding for nodejs-resolver",
   "main": "index.js",
   "license": "MIT",
