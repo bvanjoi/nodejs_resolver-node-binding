@@ -1,8 +1,11 @@
 use napi::bindgen_prelude::External;
 use napi_derive::napi;
-use nodejs_resolver::{AliasMap, Resolver, ResolverOptions};
+use nodejs_resolver::{AliasMap, Resolver, ResolverOptions, ResolverUnsafeCache};
 use serde::Deserialize;
-use std::path::{Path, PathBuf};
+use std::{
+  path::{Path, PathBuf},
+  sync::Arc,
+};
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -32,7 +35,7 @@ pub struct RawResolverOptions {
 }
 
 impl RawResolverOptions {
-  pub fn normalized(&self) -> ResolverOptions {
+  pub fn normalized(&self, unsafe_cache: Option<Arc<ResolverUnsafeCache>>) -> ResolverOptions {
     let default = ResolverOptions::default();
     ResolverOptions {
       enforce_extension: self.enforce_extension.to_owned(),
@@ -51,11 +54,12 @@ impl RawResolverOptions {
       main_files: self.main_files.to_owned().unwrap_or(default.main_files),
       main_fields: self.main_fields.to_owned().unwrap_or(default.main_fields),
       prefer_relative: self.prefer_relative.unwrap_or(default.prefer_relative),
-      enable_unsafe_cache: self
+      disable_unsafe_cache: self
         .enable_unsafe_cache
         .to_owned()
-        .unwrap_or(default.enable_unsafe_cache),
+        .unwrap_or(default.disable_unsafe_cache),
       tsconfig: self.tsconfig_path.to_owned().map(PathBuf::from),
+      unsafe_cache,
     }
   }
 }
@@ -77,7 +81,17 @@ pub struct ResolverInternal {}
 
 #[napi(ts_return_type = "ExternalObject<ResolverInternal>")]
 pub fn create(options: RawResolverOptions) -> Result<External<Resolver>, napi::Error> {
-  let options = options.normalized();
+  let options = options.normalized(None);
+  let resolver = Resolver::new(options);
+  Ok(External::new(resolver))
+}
+
+#[napi(ts_return_type = "ExternalObject<ResolverInternal>")]
+pub fn create_resolver_and_inherit_unsafe_cache_from_another(
+  options: RawResolverOptions,
+  another: External<Resolver>,
+) -> Result<External<Resolver>, napi::Error> {
+  let options = options.normalized(another.unsafe_cache.clone());
   let resolver = Resolver::new(options);
   Ok(External::new(resolver))
 }
