@@ -1,6 +1,6 @@
 use napi::bindgen_prelude::External;
 use napi_derive::napi;
-use nodejs_resolver::{AliasMap, Resolver, ResolverOptions, ResolverUnsafeCache};
+use nodejs_resolver::{AliasMap, Resolver, ResolverOptions, ResolverUnsafeCache, SideEffects};
 use serde::Deserialize;
 use std::{
   path::{Path, PathBuf},
@@ -113,6 +113,37 @@ pub fn resolve(
         Ok(String::from("false"))
       }
     }
+    Err(err) => Err(napi::Error::new(napi::Status::GenericFailure, err)),
+  }
+}
+
+#[napi(object)]
+pub struct SideEffectsStats {
+  pub bool_val: Option<bool>,
+  pub array_val: Option<Vec<String>>,
+  pub pkg_file_path: String,
+}
+
+#[napi(
+  ts_args_type = "resolver: ExternalObject<ResolverInternal>, path: string",
+  ts_return_type = "{boolVal?: boolean, arrayVal?: string[], pkgFilePath: string} | undefined"
+)]
+pub fn load_side_effects(
+  resolver: External<Resolver>,
+  path: String,
+) -> Result<Option<SideEffectsStats>, napi::Error> {
+  match (*resolver).load_sideeffects(&Path::new(&path)) {
+    Ok(val) => Ok(val.map(|val| {
+      let (bool_val, array_val) = val.1.map(|side_effects| match side_effects {
+        SideEffects::Bool(bool) => (Some(bool), None),
+        SideEffects::Array(array) => (None, Some(array)),
+      }).unwrap_or((None, None));
+      SideEffectsStats {
+        pkg_file_path: val.0.display().to_string(),
+        bool_val,
+        array_val,
+      }
+    })),
     Err(err) => Err(napi::Error::new(napi::Status::GenericFailure, err)),
   }
 }

@@ -343,6 +343,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:14.14.31":
+  version: 14.14.31
+  resolution: "@types/node@npm:14.14.31"
+  checksum: 5b9ab3660ee63abc57affc836c0d50b2941a862c5b6c241c02762d8e1ad610f6b0d350d7426218dc401b5abc7d6294ee1b475da7c331e486d59a5608d1a0b777
+  languageName: node
+  linkType: hard
+
 "@typescript-eslint/eslint-plugin@npm:^5.27.1":
   version: 5.27.1
   resolution: "@typescript-eslint/eslint-plugin@npm:5.27.1"
@@ -2992,6 +2999,7 @@ __metadata:
   dependencies:
     "@napi-rs/cli": ^2.9.0
     "@swc-node/register": ^1.5.1
+    "@types/node": 14.14.31
     "@typescript-eslint/eslint-plugin": ^5.27.1
     "@typescript-eslint/parser": ^5.27.1
     ava: ^4.3.0

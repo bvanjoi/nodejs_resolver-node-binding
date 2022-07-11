@@ -1,7 +1,5 @@
 import path from 'path'
-
 import test from 'ava'
-
 import factory, { RawResolverOptions } from '../index'
 
 test('sync function from native code', (t) => {
@@ -38,7 +36,6 @@ test('extensions options', (t) => {
   t.is(result2, path.resolve(__dirname, './fixture/lib.ts?query#fragment'))
 })
 
-
 test('alias options', (t) => {
   const resolverOptions: RawResolverOptions = {
     alias: [
@@ -58,4 +55,12 @@ test('alias options', (t) => {
 
   const result2 = factory.resolve(resolver, __dirname, '@false/lib')
   t.is(result2, "false")
+})
+
+test('load sideeffects', (t) => {
+  const resolver = factory.create({})
+  const result = factory.loadSideEffects(resolver, path.resolve(__dirname, "./fixture/node_modules/a"));
+  t.is(result?.boolVal, false)
+  t.is(result?.arrayVal, undefined)
+  t.is(result?.pkgFilePath, path.resolve(__dirname, "./fixture/node_modules/a/package.json"))
 })
