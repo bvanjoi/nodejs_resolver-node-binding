@@ -25,7 +25,6 @@ export interface RawResolverOptions {
   mainFields?: Array<string>
   modules?: Array<string>
   preferRelative?: boolean
-  enableUnsafeCache?: boolean
   tsconfigPath?: string
 }
 export interface ResolverInternal {

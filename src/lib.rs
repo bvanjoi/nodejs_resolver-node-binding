@@ -30,7 +30,6 @@ pub struct RawResolverOptions {
   pub main_fields: Option<Vec<String>>,
   pub modules: Option<Vec<String>>,
   pub prefer_relative: Option<bool>,
-  pub enable_unsafe_cache: Option<bool>,
   pub tsconfig_path: Option<String>,
 }
 
@@ -54,10 +53,6 @@ impl RawResolverOptions {
       main_files: self.main_files.to_owned().unwrap_or(default.main_files),
       main_fields: self.main_fields.to_owned().unwrap_or(default.main_fields),
       prefer_relative: self.prefer_relative.unwrap_or(default.prefer_relative),
-      disable_unsafe_cache: self
-        .enable_unsafe_cache
-        .to_owned()
-        .unwrap_or(default.disable_unsafe_cache),
       tsconfig: self.tsconfig_path.to_owned().map(PathBuf::from),
       unsafe_cache,
     }

@@ -12,8 +12,8 @@ crate-type = ["cdylib"]
 [dependencies]
 napi = "2"
 napi-derive = "2"
-nodejs-resolver = "0.0.26"
-serde = { version = "1.0.137", features = ["derive"] }
+nodejs-resolver = "0.0.27"
+serde = { version = "1.0.138", features = ["derive"] }
 
 [build-dependencies]
 napi-build = "2"
