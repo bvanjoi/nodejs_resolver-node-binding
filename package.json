@@ -1,6 +1,6 @@
 {
   "name": "nodejs-resolver",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "description": "node binding for nodejs-resolver",
   "main": "index.js",
   "license": "MIT",
@@ -52,6 +52,7 @@
   "devDependencies": {
     "@napi-rs/cli": "^2.9.0",
     "@swc-node/register": "^1.5.1",
+    "@types/node": "14.14.31",
     "@typescript-eslint/eslint-plugin": "^5.27.1",
     "@typescript-eslint/parser": "^5.27.1",
     "ava": "^4.3.0",

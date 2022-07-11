@@ -218,8 +218,9 @@ if (!nativeBinding) {
   throw new Error(`Failed to load native binding`)
 }
 
-const { create, createResolverAndInheritUnsafeCacheFromAnother, resolve } = nativeBinding
+const { create, createResolverAndInheritUnsafeCacheFromAnother, resolve, loadSideEffects } = nativeBinding
 
 module.exports.create = create
 module.exports.createResolverAndInheritUnsafeCacheFromAnother = createResolverAndInheritUnsafeCacheFromAnother
 module.exports.resolve = resolve
+module.exports.loadSideEffects = loadSideEffects
