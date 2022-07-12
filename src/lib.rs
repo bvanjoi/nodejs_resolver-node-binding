@@ -22,7 +22,7 @@ pub struct RawResolverOptions {
   pub extensions: Option<Vec<String>>,
   pub enforce_extension: Option<bool>,
   pub alias: Option<Vec<Alias>>,
-  pub alias_fields: Option<Vec<String>>,
+  pub browser_field: Option<bool>,
   pub condition_names: Option<Vec<String>>,
   pub symlinks: Option<bool>,
   pub description_file: Option<Option<String>>,
@@ -40,7 +40,7 @@ impl RawResolverOptions {
       enforce_extension: self.enforce_extension.to_owned(),
       extensions: self.extensions.to_owned().unwrap_or(default.extensions),
       alias: self.alias.to_owned().map_or(default.alias, parse_alias),
-      alias_fields: self.alias_fields.to_owned().unwrap_or(default.alias_fields),
+      browser_field: self.browser_field.to_owned().unwrap_or(default.browser_field),
       condition_names: self
         .condition_names
         .to_owned()
@@ -81,7 +81,6 @@ pub fn create(options: RawResolverOptions) -> Result<External<Resolver>, napi::E
   Ok(External::new(resolver))
 }
 
-
 #[napi(object)]
 pub struct ResolverCacheInternal {}
 
@@ -100,7 +99,8 @@ pub fn create_with_external_cache(
   options: RawResolverOptions,
   external_cache: External<Arc<ResolverUnsafeCache>>,
 ) -> Result<External<Resolver>, napi::Error> {
-  let options = options.normalized(Some(external_cache.clone()));
+  let external_cache = external_cache.as_ref().clone();
+  let options = options.normalized(Some(external_cache));
   let resolver = Resolver::new(options);
   Ok(External::new(resolver))
 }
