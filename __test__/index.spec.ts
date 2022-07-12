@@ -64,3 +64,23 @@ test('load sideeffects', (t) => {
   t.is(result?.arrayVal, undefined)
   t.is(result?.pkgFilePath, path.resolve(__dirname, "./fixture/node_modules/a/package.json"))
 })
+
+test("shared cache", (t) => {
+  const sharedCache = factory.createExternalCache();
+  const resolver1 = factory.createWithExternalCache({}, sharedCache);
+  const resolver2 = factory.createWithExternalCache({}, sharedCache);
+
+  const uncachedStart = process.hrtime.bigint();
+  factory.loadSideEffects(resolver1, path.resolve(__dirname, "./fixture/node_modules/a"));
+  const uncachedEnd = process.hrtime.bigint();
+  const uncachedDuration = uncachedEnd - uncachedStart;
+
+  const cachedStart = process.hrtime.bigint();
+  factory.loadSideEffects(resolver2, path.resolve(__dirname, "./fixture/node_modules/a"));
+  const cachedEnd = process.hrtime.bigint();
+  const cachedDuration = cachedEnd - cachedStart;
+  console.log('uncached: ', uncachedDuration, 'cached: ', cachedDuration);
+  // maybe expose content in cache and ensure it is not empty may be a better choice.
+  // but I think the following statement will usefully.
+  t.is(cachedDuration - uncachedDuration < 0, true)
+})

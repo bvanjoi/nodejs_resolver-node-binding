@@ -81,12 +81,26 @@ pub fn create(options: RawResolverOptions) -> Result<External<Resolver>, napi::E
   Ok(External::new(resolver))
 }
 
-#[napi(ts_return_type = "ExternalObject<ResolverInternal>")]
-pub fn create_resolver_and_inherit_unsafe_cache_from_another(
+
+#[napi(object)]
+pub struct ResolverCacheInternal {}
+
+#[napi(ts_return_type = "ExternalObject<ResolverCacheInternal>")]
+pub fn create_external_cache() -> Result<External<Arc<ResolverUnsafeCache>>, napi::Error> {
+  Ok(External::new(
+    Resolver::new(Default::default()).unsafe_cache.unwrap(),
+  ))
+}
+
+#[napi(
+  ts_args_type = "options: RawResolverOptions, external_cache: ExternalObject<ResolverCacheInternal>",
+  ts_return_type = "ExternalObject<ResolverInternal>"
+)]
+pub fn create_with_external_cache(
   options: RawResolverOptions,
-  another: External<Resolver>,
+  external_cache: External<Arc<ResolverUnsafeCache>>,
 ) -> Result<External<Resolver>, napi::Error> {
-  let options = options.normalized(another.unsafe_cache.clone());
+  let options = options.normalized(Some(external_cache.clone()));
   let resolver = Resolver::new(options);
   Ok(External::new(resolver))
 }
@@ -134,10 +148,13 @@ pub fn load_side_effects(
 ) -> Result<Option<SideEffectsStats>, napi::Error> {
   match (*resolver).load_sideeffects(&Path::new(&path)) {
     Ok(val) => Ok(val.map(|val| {
-      let (bool_val, array_val) = val.1.map(|side_effects| match side_effects {
-        SideEffects::Bool(bool) => (Some(bool), None),
-        SideEffects::Array(array) => (None, Some(array)),
-      }).unwrap_or((None, None));
+      let (bool_val, array_val) = val
+        .1
+        .map(|side_effects| match side_effects {
+          SideEffects::Bool(bool) => (Some(bool), None),
+          SideEffects::Array(array) => (None, Some(array)),
+        })
+        .unwrap_or((None, None));
       SideEffectsStats {
         pkg_file_path: val.0.display().to_string(),
         bool_val,
