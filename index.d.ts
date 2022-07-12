@@ -31,7 +31,11 @@ export interface ResolverInternal {
   
 }
 export function create(options: RawResolverOptions): ExternalObject<ResolverInternal>
-export function createResolverAndInheritUnsafeCacheFromAnother(options: RawResolverOptions, another: ExternalObject<Resolver>): ExternalObject<ResolverInternal>
+export function createWithExternalCache(options: RawResolverOptions, external_cache: ExternalObject<ResolverCacheInternal>): ExternalObject<ResolverInternal>
+export interface ResolverCacheInternal {
+  
+}
+export function createExternalCache(): ExternalObject<ResolverCacheInternal>
 export function resolve(resolver: ExternalObject<ResolverInternal>, base_dir: string, id: string): string
 export interface SideEffectsStats {
   boolVal?: boolean
