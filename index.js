@@ -218,10 +218,10 @@ if (!nativeBinding) {
   throw new Error(`Failed to load native binding`)
 }
 
-const { create, createWithExternalCache, createExternalCache, resolve, loadSideEffects } = nativeBinding
+const { create, createExternalCache, createWithExternalCache, resolve, loadSideEffects } = nativeBinding
 
 module.exports.create = create
-module.exports.createWithExternalCache = createWithExternalCache
 module.exports.createExternalCache = createExternalCache
+module.exports.createWithExternalCache = createWithExternalCache
 module.exports.resolve = resolve
 module.exports.loadSideEffects = loadSideEffects

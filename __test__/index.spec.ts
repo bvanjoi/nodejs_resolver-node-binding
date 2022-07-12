@@ -65,7 +65,7 @@ test('load sideeffects', (t) => {
   t.is(result?.pkgFilePath, path.resolve(__dirname, "./fixture/node_modules/a/package.json"))
 })
 
-test("shared cache", (t) => {
+test("shared cache speedy ensure", (t) => {
   const sharedCache = factory.createExternalCache();
   const resolver1 = factory.createWithExternalCache({}, sharedCache);
   const resolver2 = factory.createWithExternalCache({}, sharedCache);
@@ -83,4 +83,54 @@ test("shared cache", (t) => {
   // maybe expose content in cache and ensure it is not empty may be a better choice.
   // but I think the following statement will usefully.
   t.is(cachedDuration - uncachedDuration < 0, true)
+})
+
+
+test("without cache", (t) => {
+  const resolver1 = factory.create({
+    browserField: true,
+  })
+  const resolver2 = factory.create({})
+  t.is(
+    factory.resolve(
+      resolver2,
+      path.resolve(__dirname, './fixture'),
+      'a/node'
+    ),
+    path.resolve(__dirname, './fixture/node_modules/a/node.js')
+  );
+  t.is(
+    factory.resolve(
+      resolver1,
+      path.resolve(__dirname, './fixture'),
+      'a/node'
+    ),
+    path.resolve(__dirname, './fixture/node_modules/a/browser.js')
+  );
+})
+
+test("shared cache load package.json", (t) => {
+  const sharedCache = factory.createExternalCache();
+  const resolver1 = factory.createWithExternalCache({
+    browserField: true,
+  }, sharedCache);
+  const resolver2 = factory.createWithExternalCache({}, sharedCache);
+
+  t.is(
+    factory.resolve(
+      resolver1,
+      path.resolve(__dirname, './fixture'),
+      'a/node'
+    ),
+    path.resolve(__dirname, './fixture/node_modules/a/browser.js')
+  );
+
+  t.is(
+    factory.resolve(
+      resolver2,
+      path.resolve(__dirname, './fixture'),
+      'a/node'
+    ),
+    path.resolve(__dirname, './fixture/node_modules/a/node.js')
+  );
 })
