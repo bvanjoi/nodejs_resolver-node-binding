@@ -57,34 +57,13 @@ test('alias options', (t) => {
   t.is(result2, "false")
 })
 
-test('load sideeffects', (t) => {
+test('load side effects', (t) => {
   const resolver = factory.create({})
   const result = factory.loadSideEffects(resolver, path.resolve(__dirname, "./fixture/node_modules/a"));
   t.is(result?.boolVal, false)
   t.is(result?.arrayVal, undefined)
   t.is(result?.pkgFilePath, path.resolve(__dirname, "./fixture/node_modules/a/package.json"))
 })
-
-test("shared cache speedy ensure", (t) => {
-  const sharedCache = factory.createExternalCache();
-  const resolver1 = factory.createWithExternalCache({}, sharedCache);
-  const resolver2 = factory.createWithExternalCache({}, sharedCache);
-
-  const uncachedStart = process.hrtime.bigint();
-  factory.loadSideEffects(resolver1, path.resolve(__dirname, "./fixture/node_modules/a"));
-  const uncachedEnd = process.hrtime.bigint();
-  const uncachedDuration = uncachedEnd - uncachedStart;
-
-  const cachedStart = process.hrtime.bigint();
-  factory.loadSideEffects(resolver2, path.resolve(__dirname, "./fixture/node_modules/a"));
-  const cachedEnd = process.hrtime.bigint();
-  const cachedDuration = cachedEnd - cachedStart;
-  console.log('uncached: ', uncachedDuration, 'cached: ', cachedDuration);
-  // maybe expose content in cache and ensure it is not empty may be a better choice.
-  // but I think the following statement will usefully.
-  t.is(cachedDuration - uncachedDuration < 0, true)
-})
-
 
 test("without cache", (t) => {
   const resolver1 = factory.create({
