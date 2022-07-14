@@ -1,6 +1,6 @@
 use napi::bindgen_prelude::External;
 use napi_derive::napi;
-use nodejs_resolver::{AliasMap, Resolver, ResolverOptions, ResolverUnsafeCache, SideEffects};
+use nodejs_resolver::{AliasMap, Resolver, ResolverOptions, ResolverCache, SideEffects};
 use serde::Deserialize;
 use std::{
   path::{Path, PathBuf},
@@ -34,13 +34,16 @@ pub struct RawResolverOptions {
 }
 
 impl RawResolverOptions {
-  pub fn normalized(&self, unsafe_cache: Option<Arc<ResolverUnsafeCache>>) -> ResolverOptions {
+  pub fn normalized(&self, external_cache: Option<Arc<ResolverCache>>) -> ResolverOptions {
     let default = ResolverOptions::default();
     ResolverOptions {
       enforce_extension: self.enforce_extension.to_owned(),
       extensions: self.extensions.to_owned().unwrap_or(default.extensions),
       alias: self.alias.to_owned().map_or(default.alias, parse_alias),
-      browser_field: self.browser_field.to_owned().unwrap_or(default.browser_field),
+      browser_field: self
+        .browser_field
+        .to_owned()
+        .unwrap_or(default.browser_field),
       condition_names: self
         .condition_names
         .to_owned()
@@ -54,7 +57,7 @@ impl RawResolverOptions {
       main_fields: self.main_fields.to_owned().unwrap_or(default.main_fields),
       prefer_relative: self.prefer_relative.unwrap_or(default.prefer_relative),
       tsconfig: self.tsconfig_path.to_owned().map(PathBuf::from),
-      unsafe_cache,
+      external_cache,
     }
   }
 }
@@ -85,9 +88,9 @@ pub fn create(options: RawResolverOptions) -> Result<External<Resolver>, napi::E
 pub struct ResolverCacheInternal {}
 
 #[napi(ts_return_type = "ExternalObject<ResolverCacheInternal>")]
-pub fn create_external_cache() -> Result<External<Arc<ResolverUnsafeCache>>, napi::Error> {
+pub fn create_external_cache() -> Result<External<Arc<ResolverCache>>, napi::Error> {
   Ok(External::new(
-    Resolver::new(Default::default()).unsafe_cache.unwrap(),
+    Arc::new(ResolverCache::default()),
   ))
 }
 
@@ -97,7 +100,7 @@ pub fn create_external_cache() -> Result<External<Arc<ResolverUnsafeCache>>, nap
 )]
 pub fn create_with_external_cache(
   options: RawResolverOptions,
-  external_cache: External<Arc<ResolverUnsafeCache>>,
+  external_cache: External<Arc<ResolverCache>>,
 ) -> Result<External<Resolver>, napi::Error> {
   let external_cache = external_cache.as_ref().clone();
   let options = options.normalized(Some(external_cache));
@@ -146,7 +149,7 @@ pub fn load_side_effects(
   resolver: External<Resolver>,
   path: String,
 ) -> Result<Option<SideEffectsStats>, napi::Error> {
-  match (*resolver).load_sideeffects(&Path::new(&path)) {
+  match (*resolver).load_side_effects(&Path::new(&path)) {
     Ok(val) => Ok(val.map(|val| {
       let (bool_val, array_val) = val
         .1
