@@ -26,7 +26,7 @@ test('resolve do not exist file', (t) => {
 
 test('extensions options', (t) => {
   const resolverOptions: RawResolverOptions = {
-    extensions: ['ts', 'js'],
+    extensions: ['.ts', '.js'],
   }
   const resolver = factory.create(resolverOptions)
   const result = factory.resolve(resolver, __dirname, './fixture/lib')
