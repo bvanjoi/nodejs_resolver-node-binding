@@ -119,7 +119,7 @@ pub fn resolve(
 ) -> Result<String, napi::Error> {
   match (*resolver).resolve(Path::new(&base_dir), &id) {
     Ok(val) => {
-      if let nodejs_resolver::ResolverResult::Info(info) = val {
+      if let nodejs_resolver::ResolveResult::Info(info) = val {
         Ok(format!(
           "{}{}{}",
           info.path.display(),
