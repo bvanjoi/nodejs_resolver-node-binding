@@ -27,21 +27,19 @@ export interface RawResolverOptions {
   preferRelative?: boolean
   tsconfigPath?: string
 }
-export interface ResolverInternal {}
+export interface ResolverInternal {
+  
+}
 export function create(options: RawResolverOptions): ExternalObject<ResolverInternal>
-export interface ResolverCacheInternal {}
+export interface ResolverCacheInternal {
+  
+}
 export function createExternalCache(): ExternalObject<ResolverCacheInternal>
-export function createWithExternalCache(
-  options: RawResolverOptions,
-  external_cache: ExternalObject<ResolverCacheInternal>,
-): ExternalObject<ResolverInternal>
+export function createWithExternalCache(options: RawResolverOptions, external_cache: ExternalObject<ResolverCacheInternal>): ExternalObject<ResolverInternal>
 export function resolve(resolver: ExternalObject<ResolverInternal>, base_dir: string, id: string): string
 export interface SideEffectsStats {
   boolVal?: boolean
   arrayVal?: Array<string>
   pkgFilePath: string
 }
-export function loadSideEffects(
-  resolver: ExternalObject<ResolverInternal>,
-  path: string,
-): { boolVal?: boolean; arrayVal?: string[]; pkgFilePath: string } | undefined
+export function loadSideEffects(resolver: ExternalObject<ResolverInternal>, path: string): {boolVal?: boolean, arrayVal?: string[], pkgFilePath: string} | undefined
